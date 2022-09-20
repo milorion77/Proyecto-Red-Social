@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/generalbackground.css') }}">
+    <title>Usuarios seguidos</title>
+</head>
+<div class="bodyBackground">
+    </div>
+</div>
+<body class="backgroundForContent">
+    <nav class="navbar navbar-expand-lg navbar-light bg-info content">
+        <div class="container-fluid">
+            <div>
+                <h3 style="display: inline;"> {{login.first_name}} {{login.last_name}} </h3>
+                <h5 style="display: inline; font-style: italic;"> ⛩ Dojo user: ({{login.username}})</h5>
+            </div>
+            <div class="nav-links" >
+                <a href="/homepage">Inicio</a>
+                <a href="/post">Publicar</a>
+                <a href="/following">Seguidos</a>
+                <a href="/profile">Perfil</a>
+                <a href="/logout">Salir</a>
+            </div>
+        </div>
+    </nav>
+
+    <img style="height: 35rem;position: fixed;" src="{{ url_for('static', filename='img/super-dog.jpg') }}" alt="dojo-dog">
+    <img style="height: 35rem;position: fixed; right: 0;" src="{{ url_for('static', filename='img/super-dog.jpg') }}" alt="dojo-dog">
+
+    <div class="content2">
+        <div class="d-flex justify-content-center" style="margin-top: 6em;">
+            <div  style=" vertical-align: top; display: inline-block; text-align: center;">
+                <h1 style="font-size: 3em; color: rgb(30, 30, 206);">Tus Usuarios Seguidos</h1>
+                <h5 style="font-style: italic; color: black;">Mira las publicaciones de los Usuarios que sigues</h5>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div>
+                {%for post in posts %}
+                    <div style="margin-top: 2rem; width: 25rem; background-color: rgba(37, 37, 37, 0.329); color: black;" class="card text-center">
+                        <div class="card-header">
+                            <p>Usuario: {{post.login_id.username}}</p>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title" style="text-decoration: underline;"> {{post.titulo}}</h5>
+                            <p class="card-text">{{post.descripcion}}</p>
+                            <div class="d-flex justify-content-around">
+                                <div class="d-flex">
+                                    <p style="margin-right: 1rem; font-style: italic;">{{likes_contador}}</p>
+                                    {%if post.liked_por_Userlogin == false%}
+                                        <form action="/likepost/following" method="POST">
+                                            <input type="hidden" name="post_id" value="{{post.id}}">
+                                            <input type="hidden" name="login_id" value="{{login.id}}">
+                                            <input style="box-shadow: 5px 5px 5px black;" class="btn btn-info" type="submit" value="Like!">
+                                        </form>
+                                    {% else %}
+                                        <form action="/unlikepost/following" method="POST">
+                                            <input type="hidden" name="post_id" value="{{post.id}}">
+                                            <input type="hidden" name="login_id" value="{{login.id}}">
+                                            <input style="box-shadow: 5px 5px 5px black;" class="btn btn-danger" type="submit" value="❤Liked">
+                                        </form>
+                                    {%endif%}
+                                </div>
+                                <form action="/unfollow" method="POST">
+                                    <input type="hidden" name="login_id" value="{{post.login_id.login_id}}">
+                                    <input type="hidden" name="seguido_id" value="{{post.login_id.seguido_id}}">
+                                    <input style="box-shadow: 5px 5px 5px black;"  class="btn btn-dark" type="submit" value="Dejar de seguir">
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <p style="color: black;">creado el: {{post.created_at.strftime('%d-%m-%Y')}}</p>
+                        </div>
+                    </div>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

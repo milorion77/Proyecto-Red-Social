@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/generalbackground.css') }}">
+    <title>Perfil</title>
+</head>
+
+<body class="backgroundForContent">
+    <nav class="navbar navbar-expand-lg navbar-light bg-info content">
+        <div class="container-fluid">
+            <div>
+                <h3 style="display: inline;"> {{login.first_name}} {{login.last_name}} </h3>
+                <h5 style="display: inline; font-style: italic;"> ⛩ Dojo user: ({{login.username}})</h5>
+            </div>
+            <div class="nav-links">
+                <a href="/homepage">Inicio</a>
+                <a href="/post">Publicar</a>
+                <a href="/following">Seguidos</a>
+                <a href="/profile">Perfil</a>
+                <a href="/logout">Salir</a>
+            </div>
+        </div>
+    </nav>
+
+    <img style="height: 35rem;position: fixed;" src="{{ url_for('static', filename='img/gloom-dog.jpg') }}" alt="dojo-dog">
+    <img style="height: 35rem;position: fixed;right: 0;" src="{{ url_for('static', filename='img/gloom-dog.jpg') }}" alt="dojo-dog">
+
+    <div class="contentenido">
+        <div class="d-flex justify-content-center" style="margin-top: 6em; ">
+            <div style=" vertical-align: top; display: inline-block; text-align: center;">
+                <h1 style="font-size: 3em; color: rgb(30, 30, 206);" class="navbar-brand">Edita tu perfil aquí</h1>
+
+                <button id="open" style="box-shadow: 5px 5px 5px #000000; " type="button"
+                    class="btn btn-primary">chismosea cuantos sigues y te siguen</button>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center" style="display: flex; margin: 5em; margin-top: 2rem;">
+            <form action="/update" method="POST">
+                {% with messages = get_flashed_messages(category_filter=['update']) %}
+                {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                    <li>{{message}}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+                <input type="hidden" name="id" value="{{login.id}}">
+                <div class="input-group mb-3">
+                    <label style=" background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0);"
+                        class="input-group-text" id="inputGroup-sizing-default" for="username">Nombre de
+                        Usuario:</label>
+                    <input style="width: 400px;  background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0);"
+                        class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default" type="text" name="username"
+                        value="{{login.username}}">
+                </div>
+                <div class="input-group mb-3">
+                    <label style=" background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0);"
+                        class="input-group-text" id="inputGroup-sizing-default" for="first_name">Nombre:</label>
+                    <input style="width: 400px;  background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0); "
+                        class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default" type="text" name="first_name"
+                        value="{{login.first_name}}">
+                </div>
+                <div class="input-group mb-3">
+                    <label style=" background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0);"
+                        class="input-group-text" id="inputGroup-sizing-default" for="last_name">Apellido:</label>
+                    <input style="width: 400px;  background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0); "
+                        class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default" type="text" name="last_name"
+                        value="{{login.last_name}}">
+                </div>
+                <div class="input-group mb-3">
+                    <label style=" background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0);"
+                        class="input-group-text" id="inputGroup-sizing-default" for="email">Email:</label>
+                    <input style="width: 400px;  background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0); "
+                        class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default" type="text" name="email" value="{{login.email}}">
+                </div>
+                <div class="input-group mb-3">
+                    <label style=" background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0);"
+                        class="input-group-text" id="inputGroup-sizing-default" for="cumple">Fecha de
+                        Nacimiento:</label>
+                    <input style="width: 400px;  background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0); "
+                        class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default" type="date" name="cumple" value="{{login.cumple}}">
+                </div>
+                <div class="input-group mb-3">
+                    <label style=" background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0);"
+                        class="input-group-text" id="inputGroup-sizing-default" for="password">Contraseña:</label>
+                    <input style="width: 400px;  background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0); "
+                        class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default" type="password" name="password">
+                </div>
+                <div class="input-group mb-3">
+                    <label style=" background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0);"
+                        class="input-group-text" id="inputGroup-sizing-default" for="confirmar_password">Confirmar
+                        Contraseña:</label>
+                    <input style="width: 400px;  background-color: rgba(37, 37, 37, 0.329); color: rgb(0, 0, 0); "
+                        class="form-control" aria-label="Sizing example input"
+                        aria-describedby="inputGroup-sizing-default" type="password" name="confirmar_password">
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <input class="btn btn-danger"
+                        style="margin-top: 10px; width: 23rem; box-shadow: 10px 5px 5px #000000" type="submit"
+                        value="Actualizar">
+                </div>
+            </form>
+        </div>
+
+
+            <div class="modal-container" id="modal_container">
+                <div class="modal">
+                    <div class="modal-content">
+                        <div class="card-header" id="informacion">
+                            <img style="height: 2rem;" src="{{ url_for('static', filename='img/dojo-dog.jpg') }}"
+                                class="rounded me-2" alt="dojo-dog">
+                            <strong class="me-auto">Información</strong>
+                            <button id="close" class="modal-btn-close; btn-close" type="button"></button>
+                        </div>
+                        <div class="card-body">
+                            <p>{{login.username}} tiene  {{num_de_seguidos}} usuarios seguidos</p>
+                            <p>{{login.username}} tiene  {{num_de_seguidores}} seguidores</p>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+    </div>
+</body>
+
+</html>
+<script src="{{url_for('static', filename='js/script.js')}}"></script>
